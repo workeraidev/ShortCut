@@ -71,33 +71,33 @@ const features = [
 export default function DashboardPage() {
   return (
     <div className="container mx-auto">
-      <section className="py-20 text-center md:py-32">
+      <section className="py-12 text-center md:py-24">
         <Badge
           variant="outline"
-          className="mb-6 border-primary/50 text-primary"
+          className="mb-4 border-primary/50 text-primary md:mb-6"
         >
           <TrendingUp className="mr-2 h-4 w-4" />
           Unleash Your Viral Potential
         </Badge>
-        <h1 className="text-4xl font-bold tracking-tighter sm:text-5xl md:text-6xl">
+        <h1 className="text-3xl font-bold tracking-tighter sm:text-4xl md:text-5xl lg:text-6xl">
           Create YouTube Shorts 10x Faster with AI
         </h1>
-        <p className="mx-auto mt-6 max-w-2xl text-lg text-muted-foreground">
+        <p className="mx-auto mt-4 max-w-xl text-md text-muted-foreground md:mt-6 md:max-w-2xl md:text-lg">
           ShortCut is your AI co-pilot for turning long-form videos into
           engaging, viral shorts. Analyze, script, and optimize your content in
           minutes, not hours.
         </p>
-        <div className="mt-8 flex justify-center gap-4">
-          <Button asChild size="lg">
+        <div className="mt-6 flex flex-col items-center gap-4 sm:flex-row sm:justify-center md:mt-8">
+          <Button asChild size="lg" className="w-full sm:w-auto">
             <Link href="/analyze">Get Started Now</Link>
           </Button>
-          <Button asChild size="lg" variant="outline">
+          <Button asChild size="lg" variant="outline" className="w-full sm:w-auto">
             <Link href="#features">Learn More</Link>
           </Button>
         </div>
       </section>
 
-      <section id="features" className="py-16 md:py-24">
+      <section id="features" className="py-12 md:py-24">
         <PageHeader
           title="A Powerful Toolkit for Every Creator"
           description="Everything you need to go from long-form content to viral short-form sensation."
@@ -134,21 +134,21 @@ export default function DashboardPage() {
         </div>
       </section>
 
-      <section className="my-20 rounded-lg bg-primary/10 p-8 text-center md:my-32 md:p-16">
+      <section className="my-16 rounded-lg bg-primary/10 p-6 text-center md:my-24 md:p-12">
         <div className="mx-auto max-w-2xl">
-          <div className="mb-6 flex justify-center">
+          <div className="mb-4 flex justify-center md:mb-6">
             <div className="rounded-full bg-primary/20 p-4">
-              <Send className="h-8 w-8 text-primary" />
+              <Send className="h-6 w-6 text-primary md:h-8 md:w-8" />
             </div>
           </div>
-          <h2 className="text-3xl font-bold tracking-tight text-foreground sm:text-4xl">
+          <h2 className="text-2xl font-bold tracking-tight text-foreground sm:text-3xl md:text-4xl">
             Join Our Community
           </h2>
-          <p className="mt-4 text-lg text-muted-foreground">
+          <p className="mt-4 text-md text-muted-foreground md:text-lg">
             Connect with other creators, get exclusive tips, and stay updated
             with the latest features. Join our official Telegram channel today!
           </p>
-          <div className="mt-8">
+          <div className="mt-6 md:mt-8">
             <Button asChild size="lg">
               <Link href="https://t.me/drkingbd" target="_blank">
                 Join on Telegram
