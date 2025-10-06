@@ -10,3 +10,4 @@ import '@/ai/flows/enhance-short-accessibility.ts';
 import '@/ai/flows/generate-video-ideas.ts';
 import '@/ai/flows/repurpose-content.ts';
 import '@/ai/schemas/repurpose-content-schemas.ts';
+import '@/ai/schemas/generate-video-ideas-schemas.ts';

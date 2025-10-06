@@ -3,11 +3,12 @@
 import { useState } from "react";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
+import * as z from "zod";
 import {
   generateVideoIdeas,
-  GenerateVideoIdeasInputSchema,
   type GenerateVideoIdeasOutput,
 } from "@/ai/flows/generate-video-ideas";
+import { GenerateVideoIdeasInputSchema } from "@/ai/schemas/generate-video-ideas-schemas";
 import { useToast } from "@/hooks/use-toast";
 import { PageHeader } from "@/components/app/page-header";
 import { Loader } from "@/components/app/loader";
