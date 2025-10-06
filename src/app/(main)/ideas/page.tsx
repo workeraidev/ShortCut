@@ -72,9 +72,9 @@ export default function IdeasPage() {
   }
 
   const getScoreColor = (score: number) => {
-    if (score >= 8) return "text-green-500";
-    if (score >= 5) return "text-yellow-500";
-    return "text-red-500";
+    if (score >= 8) return "text-primary";
+    if (score >= 5) return "text-amber-500";
+    return "text-muted-foreground";
   };
   
   const getScoreBadgeVariant = (score: number) => {
@@ -180,11 +180,14 @@ export default function IdeasPage() {
               <CardHeader>
                 <div className="flex flex-col sm:flex-row sm:justify-between sm:items-start gap-2">
                   <CardTitle className="text-xl">{idea.title}</CardTitle>
-                  <div className="flex items-center gap-2 flex-shrink-0">
+                  <div className="flex items-center gap-4 flex-shrink-0">
                      <Badge variant={getScoreBadgeVariant(idea.viralPotential)} className="flex items-center gap-1.5 text-sm px-3 py-1">
                         <Sparkles className={`h-4 w-4 ${getScoreColor(idea.viralPotential)}`} />
-                        <span>Viral Score: {idea.viralPotential}/10</span>
+                        <span>Viral: {idea.viralPotential}/10</span>
                       </Badge>
+                      <Badge variant={getScoreBadgeVariant(idea.suitabilityScore)} className="flex items-center gap-1.5 text-sm px-3 py-1">
+                        <span>Fit: {idea.suitabilityScore}/10</span>
+                    </Badge>
                   </div>
                 </div>
               </CardHeader>
@@ -196,12 +199,6 @@ export default function IdeasPage() {
                 <div>
                   <h4 className="font-semibold mb-1">Hook:</h4>
                   <p className="text-muted-foreground italic">"{idea.hook}"</p>
-                </div>
-                <div className="flex items-center gap-2">
-                  <h4 className="font-semibold">Suitability:</h4>
-                   <Badge variant={getScoreBadgeVariant(idea.suitabilityScore)} className="flex items-center gap-1.5 text-sm px-3 py-1">
-                      <span>{idea.suitabilityScore}/10</span>
-                    </Badge>
                 </div>
               </CardContent>
             </Card>
