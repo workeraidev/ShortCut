@@ -115,7 +115,7 @@ function ScriptGenerator() {
         description="Generate an engaging script from any video segment."
       />
 
-      <Card className="mb-8 shadow-sm">
+      <Card className="mb-8 shadow-lg">
         <CardHeader>
           <CardTitle>Generate a Script</CardTitle>
           <CardDescription>
@@ -132,13 +132,13 @@ function ScriptGenerator() {
                   <FormItem>
                     <FormLabel>YouTube Video URL</FormLabel>
                     <FormControl>
-                      <Input placeholder="https://www.youtube.com/watch?v=..." {...field} className="bg-background/50" />
+                      <Input placeholder="https://www.youtube.com/watch?v=..." {...field} className="bg-background/50 text-base" />
                     </FormControl>
                     <FormMessage />
                   </FormItem>
                 )}
               />
-              <div className="grid grid-cols-1 gap-6 md:grid-cols-2">
+              <div className="grid grid-cols-1 gap-6 sm:grid-cols-2">
                  <FormField
                   control={form.control}
                   name="startTime"
@@ -146,7 +146,7 @@ function ScriptGenerator() {
                     <FormItem>
                       <FormLabel>Start Time (m:ss)</FormLabel>
                       <FormControl>
-                        <Input placeholder="e.g., 1:23" {...field} className="bg-background/50" />
+                        <Input placeholder="e.g., 1:23" {...field} className="bg-background/50 text-base" />
                       </FormControl>
                       <FormMessage />
                     </FormItem>
@@ -159,14 +159,14 @@ function ScriptGenerator() {
                     <FormItem>
                       <FormLabel>End Time (m:ss)</FormLabel>
                       <FormControl>
-                        <Input placeholder="e.g., 1:38" {...field} className="bg-background/50" />
+                        <Input placeholder="e.g., 1:38" {...field} className="bg-background/50 text-base" />
                       </FormControl>
                       <FormMessage />
                     </FormItem>
                   )}
                 />
               </div>
-              <div className="grid grid-cols-1 gap-6 md:grid-cols-2">
+              <div className="grid grid-cols-1 gap-6 sm:grid-cols-2">
                  <FormField
                   control={form.control}
                   name="category"
@@ -174,7 +174,7 @@ function ScriptGenerator() {
                     <FormItem>
                       <FormLabel>Video Category</FormLabel>
                       <FormControl>
-                        <Input placeholder="e.g., Tech, Lifestyle" {...field} className="bg-background/50" />
+                        <Input placeholder="e.g., Tech, Lifestyle" {...field} className="bg-background/50 text-base" />
                       </FormControl>
                       <FormMessage />
                     </FormItem>
@@ -188,7 +188,7 @@ function ScriptGenerator() {
                       <FormLabel>Target Duration</FormLabel>
                       <Select onValueChange={field.onChange} defaultValue={field.value}>
                         <FormControl>
-                          <SelectTrigger className="bg-background/50">
+                          <SelectTrigger className="bg-background/50 text-base h-11">
                             <SelectValue placeholder="Select duration" />
                           </SelectTrigger>
                         </FormControl>
@@ -203,7 +203,7 @@ function ScriptGenerator() {
                   )}
                 />
               </div>
-              <Button type="submit" disabled={isLoading} size="lg">
+              <Button type="submit" disabled={isLoading} size="lg" className="w-full sm:w-auto">
                 {isLoading && <Loader className="mr-2" />}
                 Generate Script
               </Button>
@@ -214,31 +214,31 @@ function ScriptGenerator() {
 
       {isLoading && (
         <div className="flex flex-col items-center justify-center py-20 text-center">
-          <Loader className="h-10 w-10 mb-4" />
-          <p className="text-muted-foreground">Writing your viral script...</p>
+          <Loader className="h-12 w-12 mb-4 text-primary" />
+          <p className="text-lg text-muted-foreground">Writing your viral script...</p>
         </div>
       )}
 
       {result && (
         <div className="space-y-8 animate-in fade-in-50">
-          <Card className="shadow-lg border-primary/20">
+          <Card className="shadow-xl border-primary/20 bg-card">
             <CardHeader>
-                <CardTitle>{result.title}</CardTitle>
-                <CardDescription>{result.description}</CardDescription>
+                <CardTitle className="text-3xl">{result.title}</CardTitle>
+                <CardDescription className="text-base">{result.description}</CardDescription>
             </CardHeader>
              <CardContent>
-                 <p className="font-semibold text-lg mb-2">Hook: <span className="italic font-normal text-muted-foreground">{result.hook}</span></p>
-                 <Badge>Estimated Views: {result.estimatedViews}</Badge>
+                 <p className="font-semibold text-lg mb-4">Hook: <span className="italic font-normal text-muted-foreground">{result.hook}</span></p>
+                 <Badge className="text-sm px-3 py-1">Estimated Views: {result.estimatedViews}</Badge>
              </CardContent>
           </Card>
           
-          <Card>
+          <Card className="shadow-lg">
              <CardHeader>
                 <CardTitle>Script Breakdown</CardTitle>
                 <CardDescription>A second-by-second guide for your short.</CardDescription>
              </CardHeader>
              <CardContent>
-                 <div className="border rounded-lg overflow-hidden">
+                 <div className="border rounded-lg overflow-hidden bg-background/30">
                     <Table>
                         <TableHeader>
                             <TableRow>
@@ -251,8 +251,8 @@ function ScriptGenerator() {
                         </TableHeader>
                         <TableBody>
                             {result.script.map((line, i) => (
-                                 <TableRow key={i}>
-                                    <TableCell className="font-mono">{line.timestamp}</TableCell>
+                                 <TableRow key={i} className="text-base">
+                                    <TableCell className="font-mono text-sm">{line.timestamp}</TableCell>
                                     <TableCell>{line.narration}</TableCell>
                                     <TableCell className="text-muted-foreground">{line.textOverlay}</TableCell>
                                     <TableCell className="text-muted-foreground">{line.visualDirection}</TableCell>
@@ -266,29 +266,29 @@ function ScriptGenerator() {
           </Card>
 
            <div className="grid grid-cols-1 gap-8 md:grid-cols-2">
-            <Card>
+            <Card className="shadow-lg">
               <CardHeader>
                 <CardTitle>Engagement</CardTitle>
                 <CardDescription>Questions to spark comments.</CardDescription>
               </CardHeader>
               <CardContent>
-                <ul className="list-disc space-y-2 pl-5 text-muted-foreground">
+                <ul className="list-disc space-y-3 pl-5 text-base text-muted-foreground">
                     {result.engagementQuestions.map((q, i) => <li key={i}><span className="text-foreground">{q}</span></li>)}
                 </ul>
               </CardContent>
             </Card>
-            <Card>
+            <Card className="shadow-lg">
               <CardHeader>
                 <CardTitle>Call to Action & Music</CardTitle>
                 <CardDescription>Closing thoughts and audio suggestions.</CardDescription>
               </CardHeader>
-              <CardContent className="space-y-4">
+              <CardContent className="space-y-4 text-base">
                  <div>
-                  <h4 className="font-semibold">Call to Action</h4>
+                  <h4 className="font-semibold text-lg">Call to Action</h4>
                   <p className="text-muted-foreground">{result.callToAction}</p>
                 </div>
                  <div>
-                  <h4 className="font-semibold">Suggested Music</h4>
+                  <h4 className="font-semibold text-lg">Suggested Music</h4>
                   <p className="text-muted-foreground">{result.suggestedMusic}</p>
                 </div>
               </CardContent>

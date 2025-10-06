@@ -79,7 +79,7 @@ export default function SeriesPage() {
         description="Turn one long video into a strategic, binge-worthy series of shorts."
       />
 
-      <Card className="mb-8 shadow-sm">
+      <Card className="mb-8 shadow-lg">
         <CardHeader>
           <CardTitle>Plan Your Series</CardTitle>
           <CardDescription>
@@ -99,7 +99,7 @@ export default function SeriesPage() {
                       <Input
                         placeholder="https://www.youtube.com/watch?v=..."
                         {...field}
-                        className="bg-background/50"
+                        className="bg-background/50 text-base"
                       />
                     </FormControl>
                     <FormMessage />
@@ -113,13 +113,13 @@ export default function SeriesPage() {
                   <FormItem>
                     <FormLabel>Video Duration (m:ss)</FormLabel>
                     <FormControl>
-                      <Input placeholder="e.g., 25:47" {...field} className="bg-background/50" />
+                      <Input placeholder="e.g., 25:47" {...field} className="bg-background/50 text-base" />
                     </FormControl>
                     <FormMessage />
                   </FormItem>
                 )}
               />
-              <Button type="submit" disabled={isLoading} size="lg">
+              <Button type="submit" disabled={isLoading} size="lg" className="w-full sm:w-auto">
                 {isLoading && <Loader className="mr-2" />}
                 Plan Series
               </Button>
@@ -130,17 +130,17 @@ export default function SeriesPage() {
 
       {isLoading && (
         <div className="flex flex-col items-center justify-center py-20 text-center">
-          <Loader className="h-10 w-10 mb-4" />
-          <p className="text-muted-foreground">Mapping out your video series...</p>
+          <Loader className="h-12 w-12 mb-4 text-primary" />
+          <p className="text-lg text-muted-foreground">Mapping out your video series...</p>
         </div>
       )}
 
       {result && (
         <div className="space-y-8 animate-in fade-in-50">
-          <Card className="shadow-lg border-primary/20">
+          <Card className="shadow-xl border-primary/20 bg-card">
             <CardHeader>
-              <CardTitle>Series Plan: "{result.seriesTitle}"</CardTitle>
-              <CardDescription>A breakdown of your new short-form series.</CardDescription>
+              <CardTitle className="text-3xl">Series Plan: "{result.seriesTitle}"</CardTitle>
+              <CardDescription className="text-base">A breakdown of your new short-form series.</CardDescription>
             </CardHeader>
             <CardContent>
               <Accordion type="single" collapsible className="w-full" defaultValue="item-1">
@@ -149,29 +149,29 @@ export default function SeriesPage() {
                     value={`item-${short.episodeNumber}`}
                     key={short.episodeNumber}
                   >
-                    <AccordionTrigger className="hover:no-underline">
-                      <div className="flex w-full items-center justify-between pr-4">
-                        <span className="text-left text-lg">
-                          Episode {short.episodeNumber}: {short.title}
+                    <AccordionTrigger className="hover:no-underline text-left">
+                      <div className="flex w-full items-center justify-between pr-4 gap-4">
+                        <span className="text-lg font-semibold">
+                          Ep {short.episodeNumber}: {short.title}
                         </span>
-                        <Badge variant="outline">{short.startTime} - {short.endTime}</Badge>
+                        <Badge variant="outline" className="text-sm px-3 py-1 whitespace-nowrap">{short.startTime} - {short.endTime}</Badge>
                       </div>
                     </AccordionTrigger>
-                    <AccordionContent className="space-y-4 pt-2 bg-muted/20 p-4 rounded-b-lg">
+                    <AccordionContent className="space-y-4 pt-2 bg-muted/20 p-6 rounded-b-lg text-base">
                       <div>
-                        <h4 className="font-semibold">Hook:</h4>
+                        <h4 className="font-semibold text-md">Hook:</h4>
                         <p className="text-muted-foreground">{short.hook}</p>
                       </div>
                       <div>
-                        <h4 className="font-semibold">Main Point:</h4>
+                        <h4 className="font-semibold text-md">Main Point:</h4>
                         <p className="text-muted-foreground">{short.mainPoint}</p>
                       </div>
                       <div>
-                        <h4 className="font-semibold">Cliffhanger:</h4>
+                        <h4 className="font-semibold text-md">Cliffhanger:</h4>
                         <p className="text-muted-foreground">{short.cliffhanger}</p>
                       </div>
                        <div>
-                        <h4 className="font-semibold">Recommended Posting Time:</h4>
+                        <h4 className="font-semibold text-md">Recommended Posting Time:</h4>
                         <p className="text-muted-foreground font-medium">{short.postingDateTime}</p>
                       </div>
                     </AccordionContent>
@@ -182,24 +182,24 @@ export default function SeriesPage() {
           </Card>
           
           <div className="grid grid-cols-1 gap-8 md:grid-cols-2">
-            <Card>
+            <Card className="shadow-lg">
               <CardHeader>
                 <CardTitle>Branding Elements</CardTitle>
                 <CardDescription>Consistent styling for your series.</CardDescription>
               </CardHeader>
-              <CardContent className="space-y-4">
+              <CardContent className="space-y-4 text-base">
                  <p><span className="font-semibold">Color Scheme:</span> {result.brandingElements.colorScheme}</p>
                  <p><span className="font-semibold">Font Style:</span> {result.brandingElements.fontStyle}</p>
                  <p><span className="font-semibold">Intro Style:</span> {result.brandingElements.introStyle}</p>
               </CardContent>
             </Card>
-             <Card>
+             <Card className="shadow-lg">
               <CardHeader>
                 <CardTitle>Engagement Tactics</CardTitle>
                 <CardDescription>Keep your audience coming back for more.</CardDescription>
               </CardHeader>
               <CardContent>
-                <ul className="list-disc space-y-2 pl-5 text-muted-foreground">
+                <ul className="list-disc space-y-2 pl-5 text-base text-muted-foreground">
                   {result.engagementTactics.map((tactic, i) => (
                     <li key={i}><span className="text-foreground">{tactic}</span></li>
                   ))}

@@ -89,7 +89,7 @@ export default function CompetitorsPage() {
         description="Analyze competitor content to find your unique advantage."
       />
 
-      <Card className="mb-8 shadow-sm">
+      <Card className="mb-8 shadow-lg">
         <CardHeader>
           <CardTitle>Analyze Competitors</CardTitle>
           <CardDescription>
@@ -106,7 +106,7 @@ export default function CompetitorsPage() {
                   <FormItem>
                     <FormLabel>Your Video URL</FormLabel>
                     <FormControl>
-                      <Input placeholder="https://www.youtube.com/watch?v=..." {...field} className="bg-background/50" />
+                      <Input placeholder="https://www.youtube.com/watch?v=..." {...field} className="bg-background/50 text-base" />
                     </FormControl>
                     <FormMessage />
                   </FormItem>
@@ -124,7 +124,7 @@ export default function CompetitorsPage() {
                       <FormItem>
                         <div className="flex items-center gap-2">
                            <FormControl>
-                            <Input {...field} placeholder="https://www.youtube.com/watch?v=..." className="bg-background/50"/>
+                            <Input {...field} placeholder="https://www.youtube.com/watch?v=..." className="bg-background/50 text-base"/>
                           </FormControl>
                           <Button
                             type="button"
@@ -133,7 +133,7 @@ export default function CompetitorsPage() {
                             onClick={() => remove(index)}
                             disabled={fields.length <= 1}
                           >
-                            <Trash2 className="h-4 w-4 text-muted-foreground" />
+                            <Trash2 className="h-5 w-5 text-muted-foreground hover:text-destructive" />
                             <span className="sr-only">Remove</span>
                           </Button>
                         </div>
@@ -154,7 +154,7 @@ export default function CompetitorsPage() {
                 </Button>
               </div>
 
-              <Button type="submit" disabled={isLoading} size="lg">
+              <Button type="submit" disabled={isLoading} size="lg" className="w-full sm:w-auto">
                 {isLoading && <Loader className="mr-2" />}
                 Analyze
               </Button>
@@ -165,14 +165,14 @@ export default function CompetitorsPage() {
 
       {isLoading && (
          <div className="flex flex-col items-center justify-center py-20 text-center">
-          <Loader className="h-10 w-10 mb-4" />
-          <p className="text-muted-foreground">Scouting the competition...</p>
+          <Loader className="h-12 w-12 mb-4 text-primary" />
+          <p className="text-lg text-muted-foreground">Scouting the competition...</p>
         </div>
       )}
 
       {result && (
         <div className="space-y-8 animate-in fade-in-50">
-          <Card>
+          <Card className="shadow-xl">
             <CardHeader>
               <CardTitle>Actionable Recommendations</CardTitle>
               <CardDescription>The most important takeaways from the analysis.</CardDescription>
@@ -180,12 +180,12 @@ export default function CompetitorsPage() {
             <CardContent>
               <div className="space-y-4">
               {result.recommendations.map((rec, index) => (
-                <div key={index} className="p-4 border rounded-lg bg-muted/30">
-                  <div className="flex justify-between items-center mb-2">
+                <div key={index} className="p-4 border rounded-lg bg-card-foreground/5">
+                  <div className="flex justify-between items-start mb-2 gap-4">
                     <h4 className="font-semibold text-lg">{rec.category}</h4>
-                    <Badge variant={getPriorityBadgeVariant(rec.priority)} className="capitalize">{rec.priority}</Badge>
+                    <Badge variant={getPriorityBadgeVariant(rec.priority)} className="capitalize text-sm px-3 py-1 whitespace-nowrap">{rec.priority} Priority</Badge>
                   </div>
-                  <p className="text-muted-foreground">{rec.suggestion}</p>
+                  <p className="text-muted-foreground text-base">{rec.suggestion}</p>
                 </div>
               ))}
               </div>
@@ -193,34 +193,34 @@ export default function CompetitorsPage() {
           </Card>
 
           <div className="grid grid-cols-1 gap-8 md:grid-cols-2">
-            <Card>
+            <Card className="shadow-lg">
               <CardHeader><CardTitle>Content Gaps</CardTitle></CardHeader>
               <CardContent>
-                <ul className="list-disc space-y-2 pl-5 text-muted-foreground">
+                <ul className="list-disc space-y-2 pl-5 text-base text-muted-foreground">
                   {result.contentGaps.map((item, i) => <li key={i}><span className="text-foreground">{item}</span></li>)}
                 </ul>
               </CardContent>
             </Card>
-            <Card>
+            <Card className="shadow-lg">
               <CardHeader><CardTitle>Success Patterns</CardTitle></CardHeader>
               <CardContent>
-                <ul className="list-disc space-y-2 pl-5 text-muted-foreground">
+                <ul className="list-disc space-y-2 pl-5 text-base text-muted-foreground">
                   {result.successPatterns.map((item, i) => <li key={i}><span className="text-foreground">{item}</span></li>)}
                 </ul>
               </CardContent>
             </Card>
-            <Card>
+            <Card className="shadow-lg">
               <CardHeader><CardTitle>Unique Angles</CardTitle></CardHeader>
               <CardContent>
-                <ul className="list-disc space-y-2 pl-5 text-muted-foreground">
+                <ul className="list-disc space-y-2 pl-5 text-base text-muted-foreground">
                   {result.uniqueAngles.map((item, i) => <li key={i}><span className="text-foreground">{item}</span></li>)}
                 </ul>
               </CardContent>
             </Card>
-            <Card>
+            <Card className="shadow-lg">
               <CardHeader><CardTitle>Audience Insights</CardTitle></CardHeader>
               <CardContent>
-                <ul className="list-disc space-y-2 pl-5 text-muted-foreground">
+                <ul className="list-disc space-y-2 pl-5 text-base text-muted-foreground">
                   {result.audienceInsights.map((item, i) => <li key={i}><span className="text-foreground">{item}</span></li>)}
                 </ul>
               </CardContent>

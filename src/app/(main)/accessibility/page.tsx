@@ -71,7 +71,7 @@ export default function AccessibilityPage() {
         description="Enhance your shorts for maximum reach with captions and localization."
       />
 
-      <Card className="mb-8 shadow-sm">
+      <Card className="mb-8 shadow-lg">
         <CardHeader>
           <CardTitle>Enhance Your Short</CardTitle>
           <CardDescription>
@@ -90,8 +90,8 @@ export default function AccessibilityPage() {
                     <FormControl>
                       <Textarea
                         placeholder="Paste the script or a description of your short video here..."
-                        rows={6}
-                        className="bg-background/50"
+                        rows={8}
+                        className="bg-background/50 text-base"
                         {...field}
                       />
                     </FormControl>
@@ -99,7 +99,7 @@ export default function AccessibilityPage() {
                   </FormItem>
                 )}
               />
-              <Button type="submit" disabled={isLoading} size="lg">
+              <Button type="submit" disabled={isLoading} size="lg" className="w-full sm:w-auto">
                 {isLoading && <Loader className="mr-2" />}
                 Enhance Accessibility
               </Button>
@@ -110,14 +110,14 @@ export default function AccessibilityPage() {
 
       {isLoading && (
         <div className="flex flex-col items-center justify-center py-20 text-center">
-          <Loader className="h-10 w-10 mb-4" />
-          <p className="text-muted-foreground">Analyzing and enhancing your content...</p>
+          <Loader className="h-12 w-12 mb-4 text-primary" />
+          <p className="text-lg text-muted-foreground">Analyzing and enhancing your content...</p>
         </div>
       )}
 
       {result && (
         <div className="space-y-8 animate-in fade-in-50">
-          <Card className="shadow-lg border-primary/20">
+          <Card className="shadow-xl border-primary/20 bg-card">
             <CardHeader>
               <CardTitle>Accessibility Score</CardTitle>
               <CardDescription>
@@ -126,13 +126,13 @@ export default function AccessibilityPage() {
             </CardHeader>
             <CardContent>
               <div className="flex items-center gap-4">
-                <Progress value={result.accessibilityScore} className="w-[60%] h-3" />
-                <span className="font-bold text-xl text-primary">{result.accessibilityScore}/100</span>
+                <Progress value={result.accessibilityScore} className="w-[60%] h-4" />
+                <span className="font-bold text-2xl text-primary">{result.accessibilityScore}/100</span>
               </div>
             </CardContent>
           </Card>
 
-          <Card>
+          <Card className="shadow-lg">
             <CardHeader>
               <CardTitle>Generated Captions</CardTitle>
               <CardDescription>
@@ -140,7 +140,7 @@ export default function AccessibilityPage() {
               </CardDescription>
             </CardHeader>
             <CardContent>
-              <div className="border rounded-lg overflow-hidden">
+              <div className="border rounded-lg overflow-hidden bg-background/30">
                 <Table>
                   <TableHeader>
                     <TableRow>
@@ -152,9 +152,9 @@ export default function AccessibilityPage() {
                   <TableBody>
                     {result.captions.map((caption, index) => (
                       <TableRow key={index}>
-                        <TableCell className="font-mono">{caption.startTime}</TableCell>
-                        <TableCell className="font-mono">{caption.endTime}</TableCell>
-                        <TableCell>{caption.text}</TableCell>
+                        <TableCell className="font-mono text-sm">{caption.startTime}</TableCell>
+                        <TableCell className="font-mono text-sm">{caption.endTime}</TableCell>
+                        <TableCell className="text-base">{caption.text}</TableCell>
                       </TableRow>
                     ))}
                   </TableBody>
@@ -164,27 +164,27 @@ export default function AccessibilityPage() {
           </Card>
 
           <div className="grid grid-cols-1 gap-8 md:grid-cols-2">
-            <Card>
+            <Card className="shadow-lg">
               <CardHeader>
                 <CardTitle>Localization</CardTitle>
                 <CardDescription>Expand your reach to a global audience.</CardDescription>
               </CardHeader>
               <CardContent>
-                <h3 className="mb-3 font-semibold">Recommended Target Languages:</h3>
-                <div className="flex flex-wrap gap-2">
+                <h3 className="mb-4 font-semibold text-lg">Recommended Target Languages:</h3>
+                <div className="flex flex-wrap gap-3">
                   {result.targetLanguages.map((lang) => (
-                    <Badge key={lang} variant="secondary" className="text-sm px-3 py-1">{lang}</Badge>
+                    <Badge key={lang} variant="secondary" className="text-md px-4 py-2">{lang}</Badge>
                   ))}
                 </div>
               </CardContent>
             </Card>
-            <Card>
+            <Card className="shadow-lg">
               <CardHeader>
                 <CardTitle>Improvement Recommendations</CardTitle>
                 <CardDescription>Actionable steps to improve accessibility.</CardDescription>
               </CardHeader>
               <CardContent>
-                <ul className="list-disc space-y-3 pl-5 text-muted-foreground">
+                <ul className="list-disc space-y-3 pl-5 text-base text-muted-foreground">
                   {result.recommendations.map((rec, index) => (
                     <li key={index}><span className="text-foreground">{rec}</span></li>
                   ))}
