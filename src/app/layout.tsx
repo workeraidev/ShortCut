@@ -6,8 +6,12 @@ import { Toaster } from "@/components/ui/toaster";
 const inter = Inter({ subsets: ["latin"], variable: "--font-sans" });
 
 export const metadata: Metadata = {
-  title: "ShortCut",
-  description: "AI-powered YouTube Shorts creation system",
+  title: {
+    default: "ShortCut | AI-Powered YouTube Shorts Creation",
+    template: "%s | ShortCut",
+  },
+  description: "Your AI-powered toolkit for creating viral YouTube Shorts. Analyze videos, generate scripts, optimize for trends, and plan short series.",
+  keywords: ["YouTube Shorts", "AI video", "content creation", "viral video", "script generator", "video analysis"],
 };
 
 export default function RootLayout({

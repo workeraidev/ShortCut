@@ -1,4 +1,5 @@
 import Link from "next/link";
+import type { Metadata } from "next";
 import {
   Card,
   CardContent,
@@ -18,6 +19,11 @@ import {
 } from "lucide-react";
 import { PageHeader } from "@/components/app/page-header";
 import { Badge } from "@/components/ui/badge";
+
+export const metadata: Metadata = {
+  title: "Dashboard | ShortCut",
+  description: "Your AI-powered toolkit for creating viral YouTube Shorts. Access all features like video analysis, script generation, and more.",
+};
 
 const features = [
   {
