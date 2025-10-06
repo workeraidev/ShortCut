@@ -38,7 +38,7 @@ import { Badge } from "@/components/ui/badge";
 
 const formSchema = z.object({
   videoUrl: z.string().url("Please enter a valid YouTube URL."),
-  duration: z.string().min(1, "Please enter the video duration, e.g., 25:47").regex(/^\d{1,2}:\d{2}$/, "Use m:ss or mm:ss format"),
+  duration: z.string().min(1, "Please enter the video duration, e.g., 25:47").regex(/^\d+:\d{2}$/, "Use m:ss format"),
 });
 
 export default function SeriesPage() {
