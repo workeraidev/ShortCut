@@ -4,11 +4,11 @@ import { useState } from "react";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import * as z from "zod";
+import { repurposeContent } from "@/ai/flows/repurpose-content";
 import {
-  repurposeContent,
   RepurposeContentInputSchema,
   type RepurposeContentOutput,
-} from "@/ai/flows/repurpose-content";
+} from "@/ai/schemas/repurpose-content-schemas";
 import { useToast } from "@/hooks/use-toast";
 import { PageHeader } from "@/components/app/page-header";
 import { Loader } from "@/components/app/loader";
@@ -26,6 +26,8 @@ import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Recycle, ListChecks, Video } from "lucide-react";
+import { Suggestions, Suggestion } from "@/components/ai/suggestion";
+import { Response } from "@/components/ai/response";
 
 const formSchema = z.object({
   sourceType: z.enum(["url", "text"]),
@@ -97,7 +99,6 @@ export default function RepurposePage() {
           <Form {...form}>
             <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6">
               <Tabs defaultValue="url" className="w-full" onValueChange={(value) => {
-                setActiveTab(value);
                 form.setValue("sourceType", value as "url" | "text");
                 form.clearErrors();
               }}>
@@ -166,11 +167,7 @@ export default function RepurposePage() {
               <CardDescription>The most important points from the original content.</CardDescription>
             </CardHeader>
             <CardContent>
-              <ul className="list-disc space-y-2 pl-5 text-base">
-                {result.keyTakeaways.map((takeaway, index) => (
-                  <li key={index} className="text-foreground">{takeaway}</li>
-                ))}
-              </ul>
+              <Response>{result.keyTakeaways.map(t => `- ${t}`).join('\n')}</Response>
             </CardContent>
           </Card>
 
@@ -180,24 +177,23 @@ export default function RepurposePage() {
               Short Video Ideas
             </h2>
             <div className="space-y-6">
-              {result.videoIdeas.map((idea, index) => (
-                <Card key={index} className="shadow-lg hover:shadow-primary/20 transition-shadow">
-                  <CardHeader>
-                     <CardTitle className="text-xl">{idea.title}</CardTitle>
-                     <CardDescription>Format Suggestion: <Badge variant="secondary">{idea.format}</Badge></CardDescription>
-                  </CardHeader>
-                  <CardContent className="space-y-3">
-                     <div>
-                        <h4 className="font-semibold mb-1">Content Angle:</h4>
-                        <p className="text-muted-foreground">{idea.contentAngle}</p>
-                    </div>
-                     <div>
-                        <h4 className="font-semibold mb-1">Hook Idea:</h4>
-                        <p className="text-muted-foreground italic">"{idea.hook}"</p>
-                    </div>
-                  </CardContent>
-                </Card>
-              ))}
+                <Suggestions>
+                  {result.videoIdeas.map((idea, index) => (
+                    <Suggestion
+                      key={index}
+                      suggestion={idea.title}
+                      onClick={() => {
+                        const newResult = { ...result };
+                        const clickedIdea = newResult.videoIdeas.splice(index, 1);
+                        newResult.videoIdeas.unshift(clickedIdea[0]);
+                        setResult(newResult);
+                      }}
+                    />
+                  ))}
+                </Suggestions>
+                <Response>
+                  {result.videoIdeas.map(idea => `### ${idea.title}\n\n**Format:** ${idea.format}\n\n**Hook:** "${idea.hook}"\n\n**Angle:** ${idea.contentAngle}`).join('\n\n---\n\n')}
+                </Response>
             </div>
           </div>
         </div>
