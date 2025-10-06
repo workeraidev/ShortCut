@@ -12,7 +12,7 @@ import { useToast } from "@/hooks/use-toast";
 import { PageHeader } from "@/components/app/page-header";
 import { Loader } from "@/components/app/loader";
 import { Button } from "@/components/ui/button";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
 import {
   Form,
   FormControl,
@@ -27,7 +27,7 @@ import { Badge } from "@/components/ui/badge";
 
 const formSchema = z.object({
   myVideoUrl: z.string().url("Please enter a valid URL for your video."),
-  competitorUrls: z.array(z.object({ value: z.string().url("Please enter a valid URL.") })),
+  competitorUrls: z.array(z.object({ value: z.string().url("Please enter a valid URL.") })).min(1, 'Please add at least one competitor.'),
 });
 
 export default function CompetitorsPage() {
@@ -89,9 +89,12 @@ export default function CompetitorsPage() {
         description="Analyze competitor content to find your unique advantage."
       />
 
-      <Card className="mb-8">
+      <Card className="mb-8 shadow-sm">
         <CardHeader>
           <CardTitle>Analyze Competitors</CardTitle>
+          <CardDescription>
+            Enter your video URL and at least one competitor's to get strategic insights.
+          </CardDescription>
         </CardHeader>
         <CardContent>
           <Form {...form}>
@@ -103,14 +106,14 @@ export default function CompetitorsPage() {
                   <FormItem>
                     <FormLabel>Your Video URL</FormLabel>
                     <FormControl>
-                      <Input placeholder="https://www.youtube.com/watch?v=..." {...field} />
+                      <Input placeholder="https://www.youtube.com/watch?v=..." {...field} className="bg-background/50" />
                     </FormControl>
                     <FormMessage />
                   </FormItem>
                 )}
               />
 
-              <div>
+              <div className="space-y-4">
                 <FormLabel>Competitor Video URLs</FormLabel>
                 {fields.map((field, index) => (
                   <FormField
@@ -119,9 +122,9 @@ export default function CompetitorsPage() {
                     name={`competitorUrls.${index}.value`}
                     render={({ field }) => (
                       <FormItem>
-                        <div className="flex items-center gap-2 mt-2">
+                        <div className="flex items-center gap-2">
                            <FormControl>
-                            <Input {...field} placeholder="https://www.youtube.com/watch?v=..."/>
+                            <Input {...field} placeholder="https://www.youtube.com/watch?v=..." className="bg-background/50"/>
                           </FormControl>
                           <Button
                             type="button"
@@ -130,7 +133,8 @@ export default function CompetitorsPage() {
                             onClick={() => remove(index)}
                             disabled={fields.length <= 1}
                           >
-                            <Trash2 className="h-4 w-4" />
+                            <Trash2 className="h-4 w-4 text-muted-foreground" />
+                            <span className="sr-only">Remove</span>
                           </Button>
                         </div>
                         <FormMessage />
@@ -150,7 +154,7 @@ export default function CompetitorsPage() {
                 </Button>
               </div>
 
-              <Button type="submit" disabled={isLoading}>
+              <Button type="submit" disabled={isLoading} size="lg">
                 {isLoading && <Loader className="mr-2" />}
                 Analyze
               </Button>
@@ -160,22 +164,26 @@ export default function CompetitorsPage() {
       </Card>
 
       {isLoading && (
-        <div className="flex items-center justify-center py-10">
-          <Loader className="h-8 w-8" />
+         <div className="flex flex-col items-center justify-center py-20 text-center">
+          <Loader className="h-10 w-10 mb-4" />
+          <p className="text-muted-foreground">Scouting the competition...</p>
         </div>
       )}
 
       {result && (
-        <div className="space-y-8">
+        <div className="space-y-8 animate-in fade-in-50">
           <Card>
-            <CardHeader><CardTitle>Recommendations</CardTitle></CardHeader>
+            <CardHeader>
+              <CardTitle>Actionable Recommendations</CardTitle>
+              <CardDescription>The most important takeaways from the analysis.</CardDescription>
+            </CardHeader>
             <CardContent>
               <div className="space-y-4">
               {result.recommendations.map((rec, index) => (
-                <div key={index} className="p-4 border rounded-lg">
+                <div key={index} className="p-4 border rounded-lg bg-muted/30">
                   <div className="flex justify-between items-center mb-2">
-                    <h4 className="font-semibold">{rec.category}</h4>
-                    <Badge variant={getPriorityBadgeVariant(rec.priority)}>{rec.priority}</Badge>
+                    <h4 className="font-semibold text-lg">{rec.category}</h4>
+                    <Badge variant={getPriorityBadgeVariant(rec.priority)} className="capitalize">{rec.priority}</Badge>
                   </div>
                   <p className="text-muted-foreground">{rec.suggestion}</p>
                 </div>
@@ -188,32 +196,32 @@ export default function CompetitorsPage() {
             <Card>
               <CardHeader><CardTitle>Content Gaps</CardTitle></CardHeader>
               <CardContent>
-                <ul className="list-disc space-y-2 pl-5">
-                  {result.contentGaps.map((item, i) => <li key={i}>{item}</li>)}
+                <ul className="list-disc space-y-2 pl-5 text-muted-foreground">
+                  {result.contentGaps.map((item, i) => <li key={i}><span className="text-foreground">{item}</span></li>)}
                 </ul>
               </CardContent>
             </Card>
             <Card>
               <CardHeader><CardTitle>Success Patterns</CardTitle></CardHeader>
               <CardContent>
-                <ul className="list-disc space-y-2 pl-5">
-                  {result.successPatterns.map((item, i) => <li key={i}>{item}</li>)}
+                <ul className="list-disc space-y-2 pl-5 text-muted-foreground">
+                  {result.successPatterns.map((item, i) => <li key={i}><span className="text-foreground">{item}</span></li>)}
                 </ul>
               </CardContent>
             </Card>
             <Card>
               <CardHeader><CardTitle>Unique Angles</CardTitle></CardHeader>
               <CardContent>
-                <ul className="list-disc space-y-2 pl-5">
-                  {result.uniqueAngles.map((item, i) => <li key={i}>{item}</li>)}
+                <ul className="list-disc space-y-2 pl-5 text-muted-foreground">
+                  {result.uniqueAngles.map((item, i) => <li key={i}><span className="text-foreground">{item}</span></li>)}
                 </ul>
               </CardContent>
             </Card>
             <Card>
               <CardHeader><CardTitle>Audience Insights</CardTitle></CardHeader>
               <CardContent>
-                <ul className="list-disc space-y-2 pl-5">
-                  {result.audienceInsights.map((item, i) => <li key={i}>{item}</li>)}
+                <ul className="list-disc space-y-2 pl-5 text-muted-foreground">
+                  {result.audienceInsights.map((item, i) => <li key={i}><span className="text-foreground">{item}</span></li>)}
                 </ul>
               </CardContent>
             </Card>

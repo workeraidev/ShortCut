@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { Suspense, useEffect, useState } from "react";
 import { useSearchParams } from 'next/navigation';
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -29,13 +29,13 @@ import { Badge } from "@/components/ui/badge";
 
 const formSchema = z.object({
   videoUrl: z.string().url("Please enter a valid YouTube URL."),
-  startTime: z.string().min(1, "Start time is required."),
-  endTime: z.string().min(1, "End time is required."),
+  startTime: z.string().min(1, "Start time is required.").regex(/^\d{1,2}:\d{2}$/, "Use m:ss or mm:ss format"),
+  endTime: z.string().min(1, "End time is required.").regex(/^\d{1,2}:\d{2}$/, "Use m:ss or mm:ss format"),
   category: z.string().min(2, "Category is required."),
   duration: z.string().min(1, "Duration is required"),
 });
 
-export default function ScriptPage() {
+function ScriptGenerator() {
   const searchParams = useSearchParams();
   const { toast } = useToast();
   const [result, setResult] = useState<GenerateShortScriptOutput | null>(null);
@@ -56,27 +56,36 @@ export default function ScriptPage() {
     const videoUrl = searchParams.get('videoUrl');
     const startTime = searchParams.get('startTime');
     const duration = searchParams.get('duration');
+    const category = searchParams.get('category');
     
     if (videoUrl) {
-      form.setValue('videoUrl', videoUrl);
+      form.setValue('videoUrl', decodeURIComponent(videoUrl));
     }
     if (startTime) {
-      form.setValue('startTime', startTime);
-      // simple logic to estimate end time from duration
-      if (duration) {
-         try {
-            const [min, sec] = startTime.split(':').map(Number);
-            const totalSeconds = min * 60 + sec + parseInt(duration);
-            const endMin = Math.floor(totalSeconds / 60);
-            const endSec = totalSeconds % 60;
-            form.setValue('endTime', `${endMin}:${endSec.toString().padStart(2, '0')}`);
-         } catch (e) {
-            // ignore if time format is unexpected
-         }
+       const decodedStartTime = decodeURIComponent(startTime);
+       const timeMatch = decodedStartTime.match(/(\d{1,2}):(\d{2})/);
+       if (timeMatch) {
+         form.setValue('startTime', `${timeMatch[1]}:${timeMatch[2]}`);
+
+         if (duration) {
+           try {
+              const [min, sec] = decodedStartTime.split(':').map(Number);
+              const totalSeconds = min * 60 + sec + parseInt(decodeURIComponent(duration));
+              const endMin = Math.floor(totalSeconds / 60);
+              const endSec = totalSeconds % 60;
+              form.setValue('endTime', `${endMin}:${endSec.toString().padStart(2, '0')}`);
+           } catch (e) {
+              // ignore if time format is unexpected
+              form.setValue('endTime', `0:15`);
+           }
+        }
       }
     }
      if (duration) {
-       form.setValue('duration', duration);
+       form.setValue('duration', decodeURIComponent(duration));
+     }
+     if (category) {
+        form.setValue('category', decodeURIComponent(category));
      }
   }, [searchParams, form]);
 
@@ -106,9 +115,12 @@ export default function ScriptPage() {
         description="Generate an engaging script from any video segment."
       />
 
-      <Card className="mb-8">
+      <Card className="mb-8 shadow-sm">
         <CardHeader>
           <CardTitle>Generate a Script</CardTitle>
+          <CardDescription>
+            Fill in the details from your video to generate a custom script for a short.
+          </CardDescription>
         </CardHeader>
         <CardContent>
           <Form {...form}>
@@ -120,7 +132,7 @@ export default function ScriptPage() {
                   <FormItem>
                     <FormLabel>YouTube Video URL</FormLabel>
                     <FormControl>
-                      <Input placeholder="https://www.youtube.com/watch?v=..." {...field} />
+                      <Input placeholder="https://www.youtube.com/watch?v=..." {...field} className="bg-background/50" />
                     </FormControl>
                     <FormMessage />
                   </FormItem>
@@ -132,9 +144,9 @@ export default function ScriptPage() {
                   name="startTime"
                   render={({ field }) => (
                     <FormItem>
-                      <FormLabel>Start Time</FormLabel>
+                      <FormLabel>Start Time (m:ss)</FormLabel>
                       <FormControl>
-                        <Input placeholder="e.g., 1:23" {...field} />
+                        <Input placeholder="e.g., 1:23" {...field} className="bg-background/50" />
                       </FormControl>
                       <FormMessage />
                     </FormItem>
@@ -145,9 +157,9 @@ export default function ScriptPage() {
                   name="endTime"
                   render={({ field }) => (
                     <FormItem>
-                      <FormLabel>End Time</FormLabel>
+                      <FormLabel>End Time (m:ss)</FormLabel>
                       <FormControl>
-                        <Input placeholder="e.g., 1:38" {...field} />
+                        <Input placeholder="e.g., 1:38" {...field} className="bg-background/50" />
                       </FormControl>
                       <FormMessage />
                     </FormItem>
@@ -162,7 +174,7 @@ export default function ScriptPage() {
                     <FormItem>
                       <FormLabel>Video Category</FormLabel>
                       <FormControl>
-                        <Input placeholder="e.g., Tech, Lifestyle" {...field} />
+                        <Input placeholder="e.g., Tech, Lifestyle" {...field} className="bg-background/50" />
                       </FormControl>
                       <FormMessage />
                     </FormItem>
@@ -176,7 +188,7 @@ export default function ScriptPage() {
                       <FormLabel>Target Duration</FormLabel>
                       <Select onValueChange={field.onChange} defaultValue={field.value}>
                         <FormControl>
-                          <SelectTrigger>
+                          <SelectTrigger className="bg-background/50">
                             <SelectValue placeholder="Select duration" />
                           </SelectTrigger>
                         </FormControl>
@@ -191,7 +203,7 @@ export default function ScriptPage() {
                   )}
                 />
               </div>
-              <Button type="submit" disabled={isLoading}>
+              <Button type="submit" disabled={isLoading} size="lg">
                 {isLoading && <Loader className="mr-2" />}
                 Generate Script
               </Button>
@@ -201,14 +213,15 @@ export default function ScriptPage() {
       </Card>
 
       {isLoading && (
-        <div className="flex items-center justify-center py-10">
-          <Loader className="h-8 w-8" />
+        <div className="flex flex-col items-center justify-center py-20 text-center">
+          <Loader className="h-10 w-10 mb-4" />
+          <p className="text-muted-foreground">Writing your viral script...</p>
         </div>
       )}
 
       {result && (
-        <div className="space-y-8">
-          <Card>
+        <div className="space-y-8 animate-in fade-in-50">
+          <Card className="shadow-lg border-primary/20">
             <CardHeader>
                 <CardTitle>{result.title}</CardTitle>
                 <CardDescription>{result.description}</CardDescription>
@@ -222,45 +235,53 @@ export default function ScriptPage() {
           <Card>
              <CardHeader>
                 <CardTitle>Script Breakdown</CardTitle>
+                <CardDescription>A second-by-second guide for your short.</CardDescription>
              </CardHeader>
              <CardContent>
-                 <Table>
-                    <TableHeader>
-                        <TableRow>
-                            <TableHead>Timestamp</TableHead>
-                            <TableHead>Narration</TableHead>
-                            <TableHead>Text Overlay</TableHead>
-                            <TableHead>Visuals</TableHead>
-                            <TableHead>Audio</TableHead>
-                        </TableRow>
-                    </TableHeader>
-                    <TableBody>
-                        {result.script.map((line, i) => (
-                             <TableRow key={i}>
-                                <TableCell className="font-medium">{line.timestamp}</TableCell>
-                                <TableCell>{line.narration}</TableCell>
-                                <TableCell>{line.textOverlay}</TableCell>
-                                <TableCell>{line.visualDirection}</TableCell>
-                                <TableCell>{line.audioNote}</TableCell>
+                 <div className="border rounded-lg overflow-hidden">
+                    <Table>
+                        <TableHeader>
+                            <TableRow>
+                                <TableHead className="w-[100px]">Timestamp</TableHead>
+                                <TableHead>Narration</TableHead>
+                                <TableHead>Text Overlay</TableHead>
+                                <TableHead>Visuals</TableHead>
+                                <TableHead>Audio</TableHead>
                             </TableRow>
-                        ))}
-                    </TableBody>
-                 </Table>
+                        </TableHeader>
+                        <TableBody>
+                            {result.script.map((line, i) => (
+                                 <TableRow key={i}>
+                                    <TableCell className="font-mono">{line.timestamp}</TableCell>
+                                    <TableCell>{line.narration}</TableCell>
+                                    <TableCell className="text-muted-foreground">{line.textOverlay}</TableCell>
+                                    <TableCell className="text-muted-foreground">{line.visualDirection}</TableCell>
+                                    <TableCell className="text-muted-foreground">{line.audioNote}</TableCell>
+                                </TableRow>
+                            ))}
+                        </TableBody>
+                    </Table>
+                 </div>
              </CardContent>
           </Card>
 
            <div className="grid grid-cols-1 gap-8 md:grid-cols-2">
             <Card>
-              <CardHeader><CardTitle>Engagement</CardTitle></CardHeader>
+              <CardHeader>
+                <CardTitle>Engagement</CardTitle>
+                <CardDescription>Questions to spark comments.</CardDescription>
+              </CardHeader>
               <CardContent>
-                <h4 className="font-semibold mb-2">Engagement Questions:</h4>
-                <ul className="list-disc space-y-2 pl-5">
-                    {result.engagementQuestions.map((q, i) => <li key={i}>{q}</li>)}
+                <ul className="list-disc space-y-2 pl-5 text-muted-foreground">
+                    {result.engagementQuestions.map((q, i) => <li key={i}><span className="text-foreground">{q}</span></li>)}
                 </ul>
               </CardContent>
             </Card>
             <Card>
-              <CardHeader><CardTitle>Call to Action & Music</CardTitle></CardHeader>
+              <CardHeader>
+                <CardTitle>Call to Action & Music</CardTitle>
+                <CardDescription>Closing thoughts and audio suggestions.</CardDescription>
+              </CardHeader>
               <CardContent className="space-y-4">
                  <div>
                   <h4 className="font-semibold">Call to Action</h4>
@@ -277,4 +298,12 @@ export default function ScriptPage() {
       )}
     </div>
   );
+}
+
+export default function ScriptPage() {
+  return (
+    <Suspense fallback={<div className="container mx-auto flex items-center justify-center py-20"><Loader className="h-10 w-10"/></div>}>
+      <ScriptGenerator />
+    </Suspense>
+  )
 }

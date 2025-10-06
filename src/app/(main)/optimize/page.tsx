@@ -70,9 +70,10 @@ export default function OptimizePage() {
         description="Optimize your shorts with trending topics, titles, and music."
       />
 
-      <Card className="mb-8">
+      <Card className="mb-8 shadow-sm">
         <CardHeader>
           <CardTitle>Optimize Your Short</CardTitle>
+          <CardDescription>Describe your short and its category to get trend-based optimizations.</CardDescription>
         </CardHeader>
         <CardContent>
           <Form {...form}>
@@ -87,6 +88,7 @@ export default function OptimizePage() {
                       <Textarea
                         placeholder="Describe your short video, its topic, and main points..."
                         rows={5}
+                        className="bg-background/50"
                         {...field}
                       />
                     </FormControl>
@@ -101,13 +103,13 @@ export default function OptimizePage() {
                   <FormItem>
                     <FormLabel>Video Category</FormLabel>
                     <FormControl>
-                      <Input placeholder="e.g., Tech, Lifestyle, Education" {...field} />
+                      <Input placeholder="e.g., Tech, Lifestyle, Education" {...field} className="bg-background/50"/>
                     </FormControl>
                     <FormMessage />
                   </FormItem>
                 )}
               />
-              <Button type="submit" disabled={isLoading}>
+              <Button type="submit" disabled={isLoading} size="lg">
                 {isLoading && <Loader className="mr-2" />}
                 Optimize for Trends
               </Button>
@@ -117,21 +119,22 @@ export default function OptimizePage() {
       </Card>
 
       {isLoading && (
-        <div className="flex items-center justify-center py-10">
-          <Loader className="h-8 w-8" />
+        <div className="flex flex-col items-center justify-center py-20 text-center">
+          <Loader className="h-10 w-10 mb-4" />
+          <p className="text-muted-foreground">Catching the next wave of trends...</p>
         </div>
       )}
 
       {result && (
-        <div className="space-y-8">
+        <div className="space-y-8 animate-in fade-in-50">
           <Card>
             <CardHeader>
               <CardTitle>Optimized Titles</CardTitle>
-              <CardDescription>Attention-grabbing titles for your short.</CardDescription>
+              <CardDescription>Attention-grabbing titles designed to get clicks.</CardDescription>
             </CardHeader>
             <CardContent>
-              <ul className="list-decimal space-y-2 pl-5">
-                {result.optimizedTitles.map((title, i) => <li key={i}>{title}</li>)}
+              <ul className="list-decimal space-y-3 pl-5 text-lg">
+                {result.optimizedTitles.map((title, i) => <li key={i} className="font-medium">{title}</li>)}
               </ul>
             </CardContent>
           </Card>
@@ -139,9 +142,10 @@ export default function OptimizePage() {
           <Card>
             <CardHeader>
               <CardTitle>SEO-Optimized Description</CardTitle>
+              <CardDescription>A description crafted to improve search visibility.</CardDescription>
             </CardHeader>
             <CardContent>
-              <p className="whitespace-pre-wrap">{result.description}</p>
+              <p className="whitespace-pre-wrap bg-muted/50 p-4 rounded-lg">{result.description}</p>
             </CardContent>
           </Card>
           
@@ -149,26 +153,26 @@ export default function OptimizePage() {
             <Card>
               <CardHeader><CardTitle>Trending Topics</CardTitle></CardHeader>
               <CardContent className="flex flex-wrap gap-2">
-                {result.trendingTopics.map(topic => <Badge key={topic}>{topic}</Badge>)}
+                {result.trendingTopics.map(topic => <Badge key={topic} className="text-sm px-3 py-1">{topic}</Badge>)}
               </CardContent>
             </Card>
             <Card>
               <CardHeader><CardTitle>Hashtags</CardTitle></CardHeader>
               <CardContent className="flex flex-wrap gap-2">
-                {result.hashtags.map(tag => <Badge variant="secondary" key={tag}>{tag}</Badge>)}
+                {result.hashtags.map(tag => <Badge variant="secondary" key={tag} className="text-sm px-3 py-1">{tag}</Badge>)}
               </CardContent>
             </Card>
              <Card>
-              <CardHeader><CardTitle>Posting Time</CardTitle></CardHeader>
+              <CardHeader><CardTitle>Best Posting Time</CardTitle></CardHeader>
               <CardContent>
-                <p className="text-lg font-semibold">{result.postingTime}</p>
+                <p className="text-xl font-semibold text-primary">{result.postingTime}</p>
               </CardContent>
             </Card>
           </div>
 
           <div className="grid grid-cols-1 gap-8 md:grid-cols-2">
             <Card>
-              <CardHeader><CardTitle>Thumbnail Text</CardTitle></CardHeader>
+              <CardHeader><CardTitle>Thumbnail Text Ideas</CardTitle></CardHeader>
               <CardContent>
                 <ul className="list-disc space-y-2 pl-5">
                     {result.thumbnailText.map((text, i) => <li key={i}>{text}</li>)}
@@ -176,7 +180,7 @@ export default function OptimizePage() {
               </CardContent>
             </Card>
             <Card>
-              <CardHeader><CardTitle>Trending Music</CardTitle></CardHeader>
+              <CardHeader><CardTitle>Trending Music Suggestions</CardTitle></CardHeader>
               <CardContent>
                 <ul className="list-disc space-y-2 pl-5">
                     {result.trendingMusic.map((music, i) => <li key={i}>{music}</li>)}

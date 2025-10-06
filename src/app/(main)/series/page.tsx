@@ -38,7 +38,7 @@ import { Badge } from "@/components/ui/badge";
 
 const formSchema = z.object({
   videoUrl: z.string().url("Please enter a valid YouTube URL."),
-  duration: z.string().min(1, "Please enter the video duration."),
+  duration: z.string().min(1, "Please enter the video duration, e.g., 25:47").regex(/^\d{1,2}:\d{2}$/, "Use m:ss or mm:ss format"),
 });
 
 export default function SeriesPage() {
@@ -79,9 +79,12 @@ export default function SeriesPage() {
         description="Turn one long video into a strategic, binge-worthy series of shorts."
       />
 
-      <Card className="mb-8">
+      <Card className="mb-8 shadow-sm">
         <CardHeader>
           <CardTitle>Plan Your Series</CardTitle>
+          <CardDescription>
+            Provide your long-form video details to generate a complete series plan.
+          </CardDescription>
         </CardHeader>
         <CardContent>
           <Form {...form}>
@@ -96,6 +99,7 @@ export default function SeriesPage() {
                       <Input
                         placeholder="https://www.youtube.com/watch?v=..."
                         {...field}
+                        className="bg-background/50"
                       />
                     </FormControl>
                     <FormMessage />
@@ -107,15 +111,15 @@ export default function SeriesPage() {
                 name="duration"
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel>Video Duration</FormLabel>
+                    <FormLabel>Video Duration (m:ss)</FormLabel>
                     <FormControl>
-                      <Input placeholder="e.g., 25:47" {...field} />
+                      <Input placeholder="e.g., 25:47" {...field} className="bg-background/50" />
                     </FormControl>
                     <FormMessage />
                   </FormItem>
                 )}
               />
-              <Button type="submit" disabled={isLoading}>
+              <Button type="submit" disabled={isLoading} size="lg">
                 {isLoading && <Loader className="mr-2" />}
                 Plan Series
               </Button>
@@ -125,33 +129,35 @@ export default function SeriesPage() {
       </Card>
 
       {isLoading && (
-        <div className="flex items-center justify-center py-10">
-          <Loader className="h-8 w-8" />
+        <div className="flex flex-col items-center justify-center py-20 text-center">
+          <Loader className="h-10 w-10 mb-4" />
+          <p className="text-muted-foreground">Mapping out your video series...</p>
         </div>
       )}
 
       {result && (
-        <div className="space-y-8">
-          <Card>
+        <div className="space-y-8 animate-in fade-in-50">
+          <Card className="shadow-lg border-primary/20">
             <CardHeader>
-              <CardTitle>Series Plan: {result.seriesTitle}</CardTitle>
+              <CardTitle>Series Plan: "{result.seriesTitle}"</CardTitle>
+              <CardDescription>A breakdown of your new short-form series.</CardDescription>
             </CardHeader>
             <CardContent>
-              <Accordion type="single" collapsible className="w-full">
+              <Accordion type="single" collapsible className="w-full" defaultValue="item-1">
                 {result.shorts.map((short) => (
                   <AccordionItem
                     value={`item-${short.episodeNumber}`}
                     key={short.episodeNumber}
                   >
-                    <AccordionTrigger>
+                    <AccordionTrigger className="hover:no-underline">
                       <div className="flex w-full items-center justify-between pr-4">
-                        <span>
+                        <span className="text-left text-lg">
                           Episode {short.episodeNumber}: {short.title}
                         </span>
                         <Badge variant="outline">{short.startTime} - {short.endTime}</Badge>
                       </div>
                     </AccordionTrigger>
-                    <AccordionContent className="space-y-4 pt-2">
+                    <AccordionContent className="space-y-4 pt-2 bg-muted/20 p-4 rounded-b-lg">
                       <div>
                         <h4 className="font-semibold">Hook:</h4>
                         <p className="text-muted-foreground">{short.hook}</p>
@@ -166,7 +172,7 @@ export default function SeriesPage() {
                       </div>
                        <div>
                         <h4 className="font-semibold">Recommended Posting Time:</h4>
-                        <p className="text-muted-foreground">{short.postingDateTime}</p>
+                        <p className="text-muted-foreground font-medium">{short.postingDateTime}</p>
                       </div>
                     </AccordionContent>
                   </AccordionItem>
@@ -179,8 +185,9 @@ export default function SeriesPage() {
             <Card>
               <CardHeader>
                 <CardTitle>Branding Elements</CardTitle>
+                <CardDescription>Consistent styling for your series.</CardDescription>
               </CardHeader>
-              <CardContent className="space-y-2">
+              <CardContent className="space-y-4">
                  <p><span className="font-semibold">Color Scheme:</span> {result.brandingElements.colorScheme}</p>
                  <p><span className="font-semibold">Font Style:</span> {result.brandingElements.fontStyle}</p>
                  <p><span className="font-semibold">Intro Style:</span> {result.brandingElements.introStyle}</p>
@@ -189,11 +196,12 @@ export default function SeriesPage() {
              <Card>
               <CardHeader>
                 <CardTitle>Engagement Tactics</CardTitle>
+                <CardDescription>Keep your audience coming back for more.</CardDescription>
               </CardHeader>
               <CardContent>
-                <ul className="list-disc space-y-2 pl-5">
+                <ul className="list-disc space-y-2 pl-5 text-muted-foreground">
                   {result.engagementTactics.map((tactic, i) => (
-                    <li key={i}>{tactic}</li>
+                    <li key={i}><span className="text-foreground">{tactic}</span></li>
                   ))}
                 </ul>
               </CardContent>
