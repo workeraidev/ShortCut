@@ -2,6 +2,7 @@ import Link from "next/link";
 import {
   Card,
   CardContent,
+  CardDescription,
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
@@ -12,7 +13,8 @@ import {
   Library,
   Lightbulb,
   Swords,
-  ArrowRight
+  ArrowRight,
+  TrendingUp,
 } from "lucide-react";
 import { PageHeader } from "@/components/app/page-header";
 import { Badge } from "@/components/ui/badge";
@@ -65,23 +67,23 @@ export default function DashboardPage() {
         description="Your AI-powered toolkit for creating viral YouTube Shorts."
       />
       <div className="grid grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-3">
-        {features.map((feature) => (
+        {features.map((feature, index) => (
           <Link href={feature.href} key={feature.href} className="group">
-            <Card className="flex h-full flex-col transition-all duration-300 group-hover:-translate-y-1 group-hover:shadow-xl">
-              <CardHeader className="flex-row items-center justify-between space-y-0 pb-2">
-                <div className="flex items-center gap-3">
-                  <feature.icon className="h-6 w-6 text-primary" />
-                  <CardTitle className="text-lg font-semibold tracking-tight">
-                    {feature.title}
-                  </CardTitle>
+            <Card className="flex h-full transform-gpu flex-col transition-all duration-300 ease-in-out group-hover:-translate-y-2 group-hover:shadow-2xl group-hover:shadow-primary/20">
+              <CardHeader>
+                <div className="flex items-center justify-between">
+                  <feature.icon className="h-8 w-8 text-primary" />
+                  {feature.badge && <Badge variant="secondary">{feature.badge}</Badge>}
                 </div>
-                {feature.badge && <Badge variant="secondary">{feature.badge}</Badge>}
               </CardHeader>
-              <CardContent className="flex-grow">
-                <p className="text-muted-foreground">{feature.description}</p>
+              <CardContent className="flex flex-grow flex-col">
+                <CardTitle className="mb-2 text-xl font-bold tracking-tight">
+                  {feature.title}
+                </CardTitle>
+                <CardDescription className="flex-grow">{feature.description}</CardDescription>
               </CardContent>
               <CardContent>
-                <div className="flex items-center text-sm font-medium text-primary opacity-0 transition-opacity duration-300 group-hover:opacity-100">
+                <div className="flex items-center text-sm font-semibold text-primary opacity-0 transition-opacity duration-300 group-hover:opacity-100">
                   Go to {feature.title} <ArrowRight className="ml-2 h-4 w-4" />
                 </div>
               </CardContent>
