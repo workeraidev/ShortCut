@@ -2,6 +2,7 @@ import Link from "next/link";
 import { AppSidebar } from "@/components/app/app-sidebar";
 import { SidebarInset, SidebarProvider } from "@/components/ui/sidebar";
 import { Button } from "@/components/ui/button";
+import { Send } from "lucide-react";
 
 export default function MainLayout({
   children,
@@ -27,6 +28,7 @@ export default function MainLayout({
               <div className="flex items-center gap-4">
                 <Button variant="ghost" size="sm" asChild>
                   <Link href="https://t.me/drkingbd" target="_blank">
+                    <Send className="mr-2 h-4 w-4" />
                     Contact
                   </Link>
                 </Button>

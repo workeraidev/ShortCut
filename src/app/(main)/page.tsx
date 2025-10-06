@@ -16,13 +16,16 @@ import {
   Swords,
   ArrowRight,
   TrendingUp,
+  Send,
 } from "lucide-react";
 import { PageHeader } from "@/components/app/page-header";
 import { Badge } from "@/components/ui/badge";
+import { Button } from "@/components/ui/button";
 
 export const metadata: Metadata = {
-  title: "Dashboard | ShortCut",
-  description: "Your AI-powered toolkit for creating viral YouTube Shorts. Access all features like video analysis, script generation, and more.",
+  title: "AI-Powered Toolkit for Viral YouTube Shorts | ShortCut",
+  description:
+    "Transform your long-form videos into viral YouTube Shorts with ShortCut. Our AI-powered toolkit helps you with video analysis, script generation, trend optimization, and more.",
 };
 
 const features = [
@@ -68,35 +71,92 @@ const features = [
 export default function DashboardPage() {
   return (
     <div className="container mx-auto">
-      <PageHeader
-        title="Welcome to ShortCut"
-        description="Your AI-powered toolkit for creating viral YouTube Shorts."
-      />
-      <div className="grid grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-3">
-        {features.map((feature, index) => (
-          <Link href={feature.href} key={feature.href} className="group">
-            <Card className="flex h-full transform-gpu flex-col transition-all duration-300 ease-in-out group-hover:-translate-y-2 group-hover:shadow-2xl group-hover:shadow-primary/20">
-              <CardHeader>
-                <div className="flex items-center justify-between">
-                  <feature.icon className="h-8 w-8 text-primary" />
-                  {feature.badge && <Badge variant="secondary">{feature.badge}</Badge>}
-                </div>
-              </CardHeader>
-              <CardContent className="flex flex-grow flex-col">
-                <CardTitle className="mb-2 text-xl font-bold tracking-tight">
-                  {feature.title}
-                </CardTitle>
-                <CardDescription className="flex-grow">{feature.description}</CardDescription>
-              </CardContent>
-              <CardContent>
-                <div className="flex items-center text-sm font-semibold text-primary opacity-0 transition-opacity duration-300 group-hover:opacity-100">
-                  Go to {feature.title} <ArrowRight className="ml-2 h-4 w-4" />
-                </div>
-              </CardContent>
-            </Card>
-          </Link>
-        ))}
-      </div>
+      <section className="py-20 text-center md:py-32">
+        <Badge
+          variant="outline"
+          className="mb-6 border-primary/50 text-primary"
+        >
+          <TrendingUp className="mr-2 h-4 w-4" />
+          Unleash Your Viral Potential
+        </Badge>
+        <h1 className="text-4xl font-bold tracking-tighter sm:text-5xl md:text-6xl">
+          Create YouTube Shorts 10x Faster with AI
+        </h1>
+        <p className="mx-auto mt-6 max-w-2xl text-lg text-muted-foreground">
+          ShortCut is your AI co-pilot for turning long-form videos into
+          engaging, viral shorts. Analyze, script, and optimize your content in
+          minutes, not hours.
+        </p>
+        <div className="mt-8 flex justify-center gap-4">
+          <Button asChild size="lg">
+            <Link href="/analyze">Get Started Now</Link>
+          </Button>
+          <Button asChild size="lg" variant="outline">
+            <Link href="#features">Learn More</Link>
+          </Button>
+        </div>
+      </section>
+
+      <section id="features" className="py-16 md:py-24">
+        <PageHeader
+          title="A Powerful Toolkit for Every Creator"
+          description="Everything you need to go from long-form content to viral short-form sensation."
+        />
+        <div className="grid grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-3">
+          {features.map((feature) => (
+            <Link href={feature.href} key={feature.href} className="group">
+              <Card className="flex h-full transform-gpu flex-col transition-all duration-300 ease-in-out group-hover:-translate-y-2 group-hover:shadow-2xl group-hover:shadow-primary/20">
+                <CardHeader>
+                  <div className="flex items-center justify-between">
+                    <feature.icon className="h-8 w-8 text-primary" />
+                    {feature.badge && (
+                      <Badge variant="secondary">{feature.badge}</Badge>
+                    )}
+                  </div>
+                </CardHeader>
+                <CardContent className="flex flex-grow flex-col">
+                  <CardTitle className="mb-2 text-xl font-bold tracking-tight">
+                    {feature.title}
+                  </CardTitle>
+                  <CardDescription className="flex-grow">
+                    {feature.description}
+                  </CardDescription>
+                </CardContent>
+                <CardContent>
+                  <div className="flex items-center text-sm font-semibold text-primary opacity-0 transition-opacity duration-300 group-hover:opacity-100">
+                    Go to {feature.title}{" "}
+                    <ArrowRight className="ml-2 h-4 w-4" />
+                  </div>
+                </CardContent>
+              </Card>
+            </Link>
+          ))}
+        </div>
+      </section>
+
+      <section className="my-20 rounded-lg bg-primary/10 p-8 text-center md:my-32 md:p-16">
+        <div className="mx-auto max-w-2xl">
+          <div className="mb-6 flex justify-center">
+            <div className="rounded-full bg-primary/20 p-4">
+              <Send className="h-8 w-8 text-primary" />
+            </div>
+          </div>
+          <h2 className="text-3xl font-bold tracking-tight text-foreground sm:text-4xl">
+            Join Our Community
+          </h2>
+          <p className="mt-4 text-lg text-muted-foreground">
+            Connect with other creators, get exclusive tips, and stay updated
+            with the latest features. Join our official Telegram channel today!
+          </p>
+          <div className="mt-8">
+            <Button asChild size="lg">
+              <Link href="https://t.me/drkingbd" target="_blank">
+                Join on Telegram
+              </Link>
+            </Button>
+          </div>
+        </div>
+      </section>
     </div>
   );
 }
