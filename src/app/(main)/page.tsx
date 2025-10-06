@@ -17,6 +17,8 @@ import {
   ArrowRight,
   TrendingUp,
   Send,
+  Sparkles,
+  Recycle,
 } from "lucide-react";
 import { PageHeader } from "@/components/app/page-header";
 import { Badge } from "@/components/ui/badge";
@@ -29,6 +31,13 @@ export const metadata: Metadata = {
 };
 
 const features = [
+  {
+    title: "Idea Generation",
+    description: "Brainstorm viral video ideas based on your topic and audience.",
+    icon: Sparkles,
+    href: "/ideas",
+    badge: "New",
+  },
   {
     title: "Video Analysis",
     description: "Find viral moments & get key insights from any YouTube video.",
@@ -59,6 +68,12 @@ const features = [
     description: "Analyze competitor content to find your unique advantage.",
     icon: Swords,
     href: "/competitors",
+  },
+   {
+    title: "Content Repurposing",
+    description: "Turn articles or blog posts into short video ideas.",
+    icon: Recycle,
+    href: "/repurpose",
   },
   {
     title: "Accessibility",
@@ -110,7 +125,7 @@ export default function DashboardPage() {
                   <div className="flex items-center justify-between">
                     <feature.icon className="h-8 w-8 text-primary" />
                     {feature.badge && (
-                      <Badge variant="secondary">{feature.badge}</Badge>
+                      <Badge variant={feature.badge === 'New' ? 'default' : 'secondary'}>{feature.badge}</Badge>
                     )}
                   </div>
                 </CardHeader>

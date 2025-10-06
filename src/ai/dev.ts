@@ -7,3 +7,5 @@ import '@/ai/flows/analyze-competitor-content.ts';
 import '@/ai/flows/optimize-short-for-trends.ts';
 import '@/ai/flows/plan-multi-short-series.ts';
 import '@/ai/flows/enhance-short-accessibility.ts';
+import '@/ai/flows/generate-video-ideas.ts';
+import '@/ai/flows/repurpose-content.ts';

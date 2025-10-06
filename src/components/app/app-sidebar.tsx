@@ -9,6 +9,8 @@ import {
   LayoutDashboard,
   Library,
   Lightbulb,
+  Recycle,
+  Sparkles,
   Swords,
   Youtube,
 } from "lucide-react";
@@ -24,11 +26,13 @@ import { cn } from "@/lib/utils";
 
 const navItems = [
   { href: "/", label: "Dashboard", icon: LayoutDashboard },
+  { href: "/ideas", label: "Idea Generation", icon: Sparkles },
   { href: "/analyze", label: "Video Analysis", icon: Film },
   { href: "/script", label: "Script Generation", icon: FileText },
   { href: "/optimize", label: "Trend Optimizer", icon: Lightbulb },
   { href: "/series", label: "Series Planner", icon: Library },
   { href: "/competitors", label: "Competitor Analysis", icon: Swords },
+  { href: "/repurpose", label: "Repurpose Content", icon: Recycle },
   { href: "/accessibility", label: "Accessibility", icon: Accessibility },
 ];
 
