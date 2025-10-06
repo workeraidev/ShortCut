@@ -3,11 +3,11 @@
 import * as React from "react";
 import { cn } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
-import { ScrollArea } from "@/components/ui/scroll-area";
+import { ScrollArea, ScrollBar } from "@/components/ui/scroll-area";
 
 const Suggestions = React.forwardRef<
   React.ElementRef<typeof ScrollArea>,
-  React.ComponentProps<typeof ScrollArea>
+  React.ComponentPropsWithoutRef<typeof ScrollArea>
 >(({ className, children, ...props }, ref) => {
   return (
     <ScrollArea
@@ -15,13 +15,14 @@ const Suggestions = React.forwardRef<
       className={cn("w-full whitespace-nowrap", className)}
       {...props}
     >
-      <div className="flex gap-2 pb-4">{children}</div>
+      <div className="flex w-max space-x-2 pb-4">{children}</div>
+      <ScrollBar orientation="horizontal" />
     </ScrollArea>
   );
 });
 Suggestions.displayName = "Suggestions";
 
-interface SuggestionProps extends React.ComponentProps<typeof Button> {
+interface SuggestionProps extends React.ComponentPropsWithoutRef<typeof Button> {
   suggestion: string;
   onClick?: (suggestion: string) => void;
 }
@@ -43,6 +44,5 @@ const Suggestion = React.forwardRef<
   );
 });
 Suggestion.displayName = "Suggestion";
-
 
 export { Suggestions, Suggestion };

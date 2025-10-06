@@ -6,7 +6,6 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import * as z from "zod";
 import { repurposeContent } from "@/ai/flows/repurpose-content";
 import {
-  RepurposeContentInputSchema,
   type RepurposeContentOutput,
 } from "@/ai/schemas/repurpose-content-schemas";
 import { useToast } from "@/hooks/use-toast";
@@ -51,7 +50,6 @@ export default function RepurposePage() {
   const { toast } = useToast();
   const [result, setResult] = useState<RepurposeContentOutput | null>(null);
   const [isLoading, setIsLoading] = useState(false);
-  const [activeTab, setActiveTab] = useState("url");
 
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
@@ -80,6 +78,19 @@ export default function RepurposePage() {
       setIsLoading(false);
     }
   }
+  
+  // This is a simple client-side reordering.
+  // In a real app, you might want to call the AI again for more details on the selected idea.
+  const handleSuggestionClick = (ideaTitle: string) => {
+    if (!result) return;
+    const newResult = { ...result };
+    const clickedIdeaIndex = newResult.videoIdeas.findIndex(idea => idea.title === ideaTitle);
+    if(clickedIdeaIndex > -1) {
+      const clickedIdea = newResult.videoIdeas.splice(clickedIdeaIndex, 1);
+      newResult.videoIdeas.unshift(clickedIdea[0]);
+      setResult(newResult);
+    }
+  };
 
   return (
     <div className="container mx-auto">
@@ -100,7 +111,12 @@ export default function RepurposePage() {
             <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6">
               <Tabs defaultValue="url" className="w-full" onValueChange={(value) => {
                 form.setValue("sourceType", value as "url" | "text");
-                form.clearErrors();
+                form.clearErrors(); // Clear errors when switching tabs
+                if(value === 'url') {
+                  form.unregister('contentText');
+                } else {
+                  form.unregister('contentUrl');
+                }
               }}>
                 <TabsList className="grid w-full grid-cols-2">
                   <TabsTrigger value="url">From URL</TabsTrigger>
@@ -178,16 +194,11 @@ export default function RepurposePage() {
             </h2>
             <div className="space-y-6">
                 <Suggestions>
-                  {result.videoIdeas.map((idea, index) => (
+                  {result.videoIdeas.map((idea) => (
                     <Suggestion
-                      key={index}
+                      key={idea.title}
                       suggestion={idea.title}
-                      onClick={() => {
-                        const newResult = { ...result };
-                        const clickedIdea = newResult.videoIdeas.splice(index, 1);
-                        newResult.videoIdeas.unshift(clickedIdea[0]);
-                        setResult(newResult);
-                      }}
+                      onClick={() => handleSuggestionClick(idea.title)}
                     />
                   ))}
                 </Suggestions>
